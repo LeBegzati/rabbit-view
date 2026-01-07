@@ -1,22 +1,24 @@
 <script>
 	import { pb, store } from '$lib/store.svelte.js';
 
-	let name = $state('');
+	let rabbit = $state({
+		name: 'New Name',
+		rabbithole: ''
+	});
+
 	let rabbithole = $state(null);
 	let wrongRabbitName = $derived(name.length > 0 && name[0] !== 'J');
 
 	let rabbitholes = $state([]);
 
 	async function addRabbit() {
-		await store.addRabbit(name);
+		await store.addRabbit(name, rabbithole);
 		name = '';
 		store.listRabbits();
 	}
-
-	$effect(async () => {
-		rabbitholes = await pb.collection('rabbitholes').getFullList();
-	});
 </script>
+
+<input type="text" bind:value={rabbit.name} class="text-black" />
 
 <div>
 	<label for="name">Name</label>
@@ -25,7 +27,6 @@
 <div>
 	<label for="name">Hasenbau</label>
 	<select class="select" bind:value={rabbithole}>
-		<option disabled selected>Pick a rabbithole</option>
 		{#each rabbitholes as rabbithole (rabbithole.id)}
 			<option value={rabbithole.id}>{rabbithole.name}</option>
 		{/each}

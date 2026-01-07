@@ -35,7 +35,11 @@
 	{#each store.rabbits as rabbit, index (rabbit.id)}
 		<div class="pr-3 text-right">{index + 1}</div>
 		<div class="pr-3">{rabbit.name}</div>
-		<div class="pr-3">{rabbit.expand.rabbithole.name}</div>
+		{#if rabbit.expand.rabbithole}
+			<div class="pr-3">{rabbit.expand.rabbithole.name}</div>
+		{:else}
+			<div></div>
+		{/if}
 		<div class="pr-3">
 			<button
 				onclick={() => {
@@ -89,4 +93,4 @@
 	</div>
 </dialog>
 
-<RabbitForm></RabbitForm>
+<a href="/add"><button class="btn btn-primary"> New Rabbit! </button></a>
