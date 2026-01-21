@@ -1,18 +1,17 @@
 <script>
-	import { pb, store } from '$lib/store.svelte.js';
+	import { serverAddress, store } from '$lib/store.svelte.js';
 
 	let rabbit = $state({
 		name: 'New Name',
 		rabbithole: ''
 	});
 
-	let rabbithole = $state(null);
-	let wrongRabbitName = $derived(name.length > 0 && name[0] !== 'J');
+	let wrongRabbitName = $derived(rabbit.name.length > 0 && rabbit.name[0] !== 'J');
 
 	let rabbitholes = $state([]);
 
 	async function addRabbit() {
-		await store.addRabbit(name, rabbithole);
+		await store.addRabbit(rabbit);
 		name = '';
 		store.listRabbits();
 	}
@@ -20,21 +19,10 @@
 
 <input type="text" bind:value={rabbit.name} class="text-black" />
 
-<div>
-	<label for="name">Name</label>
-	<input type="name" bind:value={name} class="input" />
-</div>
-<div>
-	<label for="name">Hasenbau</label>
-	<select class="select" bind:value={rabbithole}>
-		{#each rabbitholes as rabbithole (rabbithole.id)}
-			<option value={rabbithole.id}>{rabbithole.name}</option>
-		{/each}
-	</select>
-</div>
-
-<button class="btn btn-primary" onclick={addRabbit} disabled={wrongRabbitName || name.length === 0}
-	>Add Rabbit!</button
+<button
+	class="btn btn-primary"
+	onclick={addRabbit}
+	disabled={wrongRabbitName || rabbit.name.length === 0}>Add Rabbit!</button
 >
 {#if wrongRabbitName}
 	<div role="alert" class="mt-4 alert alert-error">

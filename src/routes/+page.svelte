@@ -32,7 +32,7 @@
 	<div></div>
 	<div></div>
 
-	{#each store.rabbits as rabbit, index (rabbit.id)}
+	{#each store.rabbits as rabbit, index}
 		<div class="pr-3 text-right">{index + 1}</div>
 		<div class="pr-3">{rabbit.name}</div>
 		{#if rabbit.expand.rabbithole}
