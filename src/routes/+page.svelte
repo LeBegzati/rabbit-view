@@ -14,12 +14,6 @@
 		} else {
 		}
 	}
-
-	// unser "Konstruktor" (lifecycle hook) - läuft jedesmal, wenn die Seite bzw. die Komponente geladen wird:
-	$effect(() => {
-		store.listRabbits();
-		$inspect('🐰: ', store.rabbits);
-	});
 </script>
 
 <!-- unser Template / HTML-Teil der Seite bzw. der Komponente -->
@@ -40,15 +34,13 @@
 		{:else}
 			<div></div>
 		{/if}
+		<a href={"/" + rabbit.id}>
 		<div class="pr-3">
 			<button
-				onclick={() => {
-					currentRabbitId = rabbit.id;
-					editingModal.showModal();
-				}}
 				class="cursor-pointer"><Icon icon="carbon:edit" width="16" height="16" /></button
 			>
 		</div>
+	</a>
 		<div>
 			<button onclick={() => store.deleteRabbit(rabbit.id)} class="cursor-pointer text-red-500"
 				>x</button

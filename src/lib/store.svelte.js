@@ -13,12 +13,9 @@ export let store = $state({
 		});
 	},
 
-	editRabbit: async (id, newName) => {
-		let editedRabbit = {
-			name: newName
-		};
+	editRabbit: async (id, rabbit) => {
 		try {
-			const record = await pb.collection('rabbits').update(id, editedRabbit);
+			const record = await pb.collection('rabbits').update(id, rabbit);
 			if (!response.ok) {
 				alert(await response.text());
 			}
@@ -33,6 +30,7 @@ export let store = $state({
 	},
 	addRabbit: async (rabbit) => {
 		const response = await pb.collection('rabbits').create(rabbit);
+		store.listRabbits();
 		console.log(response);
 	}
 });
