@@ -1,4 +1,5 @@
 <script>
+	import { goto } from '$app/navigation';
 	import { pb } from '$lib/store.svelte.js';
 
 	let email = $state('');
@@ -11,46 +12,80 @@
 			email: email,
 			emailVisibility: true,
 			name: username,
-			password: password,
+			password: password1,
 			passwordConfirm: password2
 		};
 		const record = await pb.collection('users').create(data);
+		goto('/auth');
+	}
+
+	async function loginUser() {
+		const authData = await pb.collection('users').authWithPassword(email, password1);
+		goto('/');
 	}
 </script>
 
 <div class="card max-w-96 bg-base-100 shadow-sm">
 	<div class="card-body">
-		<h2 class="card-title">Register</h2>
+		<form class="flex flex-col">
+			<h2 class="card-title">{registration ? 'Register' : 'Login'}</h2>
 
-		<fieldset class="fieldset">
-			<legend class="fieldset-legend">Mail</legend>
-			<input type="email" class="input" placeholder="Where can we reach you?" bind:value={email} />
-		</fieldset>
+			{#if errorMessage}
+				<div class="alert alert-error">
+					<span>{errorMessage}</span>
+				</div>
+			{/if}
 
-		<fieldset class="fieldset">
-			<legend class="fieldset-legend">Username</legend>
-			<input
-				type="text"
-				class="input"
-				placeholder="How should we call you?"
-				bind:value={username}
-			/>
-		</fieldset>
+			<fieldset class="fieldset">
+				<legend class="fieldset-legend">Mail</legend>
+				<input
+					type="email"
+					class="input"
+					placeholder="Where can we reach you?"
+					bind:value={email}
+				/>
+			</fieldset>
 
-		<fieldset class="fieldset">
-			<legend class="fieldset-legend">Password</legend>
-			<input
-				type="password"
-				class="input"
-				placeholder="Choose a save one!"
-				bind:value={password1}
-			/>
+			{#if registration}
+				<fieldset class="fieldset">
+					<legend class="fieldset-legend">Username</legend>
+					<input
+						type="text"
+						class="input"
+						placeholder="How should we call you?"
+						bind:value={username}
+					/>
+				</fieldset>
+			{/if}
 
-			<input type="password" class="input" placeholder="Please repeat!" bind:value={password2} />
-		</fieldset>
+			<fieldset class="fieldset">
+				<legend class="fieldset-legend">Password</legend>
+				<input
+					type="password"
+					class="input"
+					placeholder="Choose a save one!"
+					bind:value={password1}
+				/>
+				{#if registration}
+					<input
+						type="password"
+						class="input"
+						placeholder="Please repeat!"
+						bind:value={password2}
+					/>
+				{/if}
+			</fieldset>
+			<div class="mt-4 card-actions flex flex-col items-end justify-end">
+				{#if registration}
+					<button type="button" class="btn btn-primary" onclick={registerUser}>Register</button>
+				{:else}
+					<button type="button" class="btn btn-primary" onclick={loginUser}>Login</button>
 
-		<div class="card-actions justify-end">
-			<button class="btn btn-primary" onclick={registerUser}>Register</button>
-		</div>
+					<button onclick={() => (registration = true)} class="cursor-pointer text-primary">
+						No Account? Register instead...
+					</button>
+				{/if}
+			</div>
+		</form>
 	</div>
 </div>

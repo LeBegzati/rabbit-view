@@ -16,9 +16,6 @@ export let store = $state({
 	editRabbit: async (id, rabbit) => {
 		try {
 			const record = await pb.collection('rabbits').update(id, rabbit);
-			if (!response.ok) {
-				alert(await response.text());
-			}
 		} catch (error) {
 			console.log('FEHLER');
 		}

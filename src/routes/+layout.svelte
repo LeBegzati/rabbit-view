@@ -11,10 +11,14 @@
 	}
 
 	// unser "Konstruktor" (lifecycle hook) - läuft jedesmal, wenn die Seite bzw. die Komponente geladen wird:
-	$effect(() => {
-		store.listRabbits();
+	$effect(async () => {
+		try {
+			await store.listRabbits();
+		} catch (error) {
+			console.error('Error loading rabbits:', error);
+			store.rabbits = [];
+		}
 		if (localStorage.getItem('theme')) theme = localStorage.getItem('theme');
-		$inspect('🐰: ', store.rabbits);
 	});
 </script>
 
